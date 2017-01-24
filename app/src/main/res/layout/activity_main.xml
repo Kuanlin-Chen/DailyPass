@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="chen.kuanlin.dailypass.MainActivity"
+    android:background="@drawable/dailypass_bg">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="請在此輸入您的密碼"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/editText_password"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_margin="2dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="請選擇密碼規則"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/textView_rule"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_margin="2dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="您的密碼+日期(yyyyMMdd)"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/button_yyyyMMdd"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:background="#ff7800"
+            android:layout_margin="2dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="您的密碼+日期(MMdd)"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/button_MMdd"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:background="#ff8c00"
+            android:layout_margin="2dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="您的密碼+日期(dd)"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/button_dd"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:background="#ffa000"
+            android:layout_margin="2dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="您的密碼+星期(數字)"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/button_week_number"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:background="#ffb400"
+            android:layout_margin="2dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="您的密碼+星期(英文單字)"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:id="@+id/button_week_word"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:background="#ffc800"
+            android:layout_margin="2dp" />
+
+    </LinearLayout>
+</RelativeLayout>

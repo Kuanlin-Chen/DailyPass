@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+      limit-password  設定密碼的規則
+      watch-login 監控屏幕解鎖嘗試次數
+      reset-password 更改銀幕解鎖密碼
+      force-lock 裝置自動鎖屏
+      wipe-data 删除所有資料
+      disable-camera 相機設定
+      encrypted-storage 加密狀態-->
+
+    <uses-policies>
+        <limit-password/>
+        <reset-password/>
+    </uses-policies>
+
+</device-admin>
