@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 MODE = ruleList.get(which);
-                                Toast.makeText(getApplicationContext(), MODE, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), MODE, Toast.LENGTH_SHORT).show();
                             }
                         });
                 rule.show();
@@ -144,7 +144,11 @@ public class MainActivity extends AppCompatActivity {
                     modeIsEmpty.show();
                 }else {
                     getTimeStamp(MODE);
-                    textView_password.setText(PassWord+TimeStamp);
+                    textView_password.setText("新密碼："+PassWord+TimeStamp);
+                    //SetupPassword
+                    devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
+                    //register update broadcast
+                    //update();
                 }
             }
         });
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void update(){
+        //執行完後同時註冊下一次執行的時間
         Calendar calendar = Calendar.getInstance();
         //每天00點(24小時制)執行
         calendar.add(Calendar.HOUR_OF_DAY, 00);

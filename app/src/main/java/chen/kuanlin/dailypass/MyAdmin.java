@@ -15,7 +15,7 @@ public class MyAdmin extends DeviceAdminReceiver {
 
     @Override
     public void onEnabled(Context context, Intent intent) {
-        showToast(context, "Enable DeviceAdministration");
+        showToast(context, "啟動裝置管理員");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MyAdmin extends DeviceAdminReceiver {
 
     @Override
     public void onPasswordChanged(Context context, Intent intent) {
-        showToast(context, "admin_receiver_status_pw_changed");
+        showToast(context, "密碼已變更");
     }
 
 }

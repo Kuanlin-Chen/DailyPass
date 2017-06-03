@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.R.*;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,35 +24,35 @@ public class MyReceiver extends BroadcastReceiver {
     {
         Bundle bundle = intent.getExtras();
         if(bundle.get("msg").equals("updatepassword")){
-            getTimeStamp(MainActivity.MODE);
-            //String TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-            MainActivity.devicePolicyManager.resetPassword(MainActivity.PassWord+TimeStamp, 0);
-            //執行完後同時註冊下一次執行的時間
-            Calendar calendar = Calendar.getInstance();
-            //每天00點(24小時制)執行
-            calendar.add(Calendar.HOUR_OF_DAY, 00);
-            Intent intent2 = new Intent(context, MyReceiver.class);
-            intent.putExtra("msg", "updatepassword");
+            getTimeStamp(context, MainActivity.MODE);
+            MainActivity.devicePolicyManager.resetPassword((MainActivity.PassWord)+TimeStamp, 0);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_ONE_SHOT);
-
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            update(context, intent);
         }
     }
 
-    private void getTimeStamp(String mode){
-        if (mode.equals(R.string.rule1)){
+    private void getTimeStamp(Context context, String mode){
+        //In BroadcastReceiver, need to import android.R.*
+        if (mode.equals(context.getResources().getString(R.string.rule1))){
             TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
         }
-        else if (mode.equals(R.string.rule2)){
+        else if (mode.equals(context.getResources().getString(R.string.rule2))){
             TimeStamp = new SimpleDateFormat("MMdd").format(Calendar.getInstance().getTime());
         }
-        else if (mode.equals(R.string.rule3)){
-            TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
+        else if (mode.equals(context.getResources().getString(R.string.rule3))){
+            TimeStamp = new SimpleDateFormat("dd").format(Calendar.getInstance().getTime());
         }
-        else {
-            TimeStamp = "Error";
-        }
+    }
+
+    private void update(Context context, Intent intent){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 00);
+        Intent intent2 = new Intent(context, MyReceiver.class);
+        intent.putExtra("msg", "updatepassword");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }
