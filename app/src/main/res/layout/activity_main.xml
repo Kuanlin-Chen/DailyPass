@@ -28,12 +28,12 @@
             android:layout_gravity="center"
             android:layout_margin="2dp" />
 
-        <TextView
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="請選擇密碼規則"
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/textView_rule"
+            android:id="@+id/button_rule"
             android:gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:layout_gravity="center"

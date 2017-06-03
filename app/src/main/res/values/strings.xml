@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">DailyKey</string>
+    <string name="rule1">您的密碼+日期(yyyyMMdd)</string>
+    <string name="rule2">您的密碼+日期(MMdd)</string>
+    <string name="rule3">您的密碼+星期(英文單字)</string>
 </resources>

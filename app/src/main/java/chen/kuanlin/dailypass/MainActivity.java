@@ -5,16 +5,22 @@ import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,20 +29,18 @@ public class MainActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 100;
 
     private EditText editText_password;
-    private TextView textView_rule;
-    private Button button_yyyyMMdd, button_MMdd, button_dd, button_week_number, button_week_word;
+    private Button button_rule, button_yyyyMMdd, button_MMdd, button_dd, button_week_number, button_week_word;
 
     public static String PassWord = null;
     public static int MODE = 0;
-
-    //Calendar calendar;
+    private static ArrayList<String> ruleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editText_password = (EditText) findViewById(R.id.editText_password);
-        textView_rule = (TextView) findViewById(R.id.textView_rule);
+        button_rule = (Button) findViewById(R.id.button_rule);
         button_yyyyMMdd = (Button) findViewById(R.id.button_yyyyMMdd);
         button_MMdd = (Button) findViewById(R.id.button_MMdd);
         button_dd = (Button) findViewById(R.id.button_dd);
@@ -55,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE);
         }
 
+        initData();
+        eventListener();
+
+        /*
         button_yyyyMMdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 PassWord = editText_password.getText().toString();
                 String TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
                 devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                textView_rule.setText("新密碼：" + PassWord + TimeStamp);
+                //textView_rule.setText("新密碼：" + PassWord + TimeStamp);
                 update();
             }
         });
@@ -74,31 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 PassWord = editText_password.getText().toString();
                 String TimeStamp = new SimpleDateFormat("MMdd").format(Calendar.getInstance().getTime());
                 devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                textView_rule.setText("新密碼：" + PassWord + TimeStamp);
-                update();
-            }
-        });
-
-        button_dd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MODE = 3;
-                PassWord = editText_password.getText().toString();
-                String TimeStamp = new SimpleDateFormat("dd").format(Calendar.getInstance().getTime());
-                devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                textView_rule.setText("新密碼：" + PassWord + TimeStamp);
-                update();
-            }
-        });
-
-        button_week_number.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MODE = 4;
-                PassWord = editText_password.getText().toString();
-                String TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
-                TimeStamp = wordtonumber(TimeStamp);
-                textView_rule.setText("新密碼：" + PassWord + TimeStamp);
+                //textView_rule.setText("新密碼：" + PassWord + TimeStamp);
                 update();
             }
         });
@@ -110,8 +94,32 @@ public class MainActivity extends AppCompatActivity {
                 PassWord = editText_password.getText().toString();
                 String TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
                 devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                textView_rule.setText("新密碼：" + PassWord + TimeStamp);
+                //textView_rule.setText("新密碼：" + PassWord + TimeStamp);
                 update();
+            }
+        });  */
+    }
+
+    private void initData(){
+        ruleList = new ArrayList<>();
+        ruleList.add(getString(R.string.rule1));
+        ruleList.add(getString(R.string.rule2));
+        ruleList.add(getString(R.string.rule3));
+    }
+
+    private void eventListener(){
+        button_rule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder rule = new AlertDialog.Builder(MainActivity.this)
+                        .setItems(ruleList.toArray(new String[ruleList.size()]), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String Mode = ruleList.get(which);
+                                Toast.makeText(getApplicationContext(), Mode, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                rule.show();
             }
         });
     }
@@ -156,40 +164,3 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }
-    /*private void rule(){
-        button_rule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder password_rule_ad = new AlertDialog.Builder(MainActivity.this);
-                password_rule_ad.setTitle("設定密碼規則");
-                password_rule_ad.setMessage("abcd+當天日期");
-                password_rule_ad.setNegativeButton("略過", null);
-                password_rule_ad.setPositiveButton("確認", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int fix) {
-                        String TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-                        devicePolicyManager.resetPassword("abcd"+TimeStamp, 0);
-                    }
-                });
-                password_rule_ad.show();
-            }
-        });
-    }*/
-
-    /*private void update(){
-        button_update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar calendar = Calendar.getInstance();
-                //每天00點(24小時制)執行
-                calendar.add(Calendar.HOUR_OF_DAY, 00);
-                Intent intent = new Intent(MainActivity.this, MyReceiver.class);
-                intent.putExtra("msg", "updatepassword");
-
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 1, intent, PendingIntent.FLAG_ONE_SHOT);
-
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            }
-        });
-    }*/
