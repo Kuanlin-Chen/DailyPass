@@ -24,28 +24,27 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText editText_input;
+    private TextView textView_password;
+    private Button button_rule, button_start;
+
     public static DevicePolicyManager devicePolicyManager;
     private static ComponentName DAN;
     private final int REQUEST_CODE = 100;
 
-    private EditText editText_password;
-    private Button button_rule, button_yyyyMMdd, button_MMdd, button_dd, button_week_number, button_week_word;
-
     public static String PassWord = null;
-    public static int MODE = 0;
+    private static String TimeStamp = null;
+    public static String MODE = null;
     private static ArrayList<String> ruleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editText_password = (EditText) findViewById(R.id.editText_password);
+        editText_input = (EditText) findViewById(R.id.editText_input);
+        textView_password = (TextView)findViewById(R.id.textView_password);
         button_rule = (Button) findViewById(R.id.button_rule);
-        button_yyyyMMdd = (Button) findViewById(R.id.button_yyyyMMdd);
-        button_MMdd = (Button) findViewById(R.id.button_MMdd);
-        button_dd = (Button) findViewById(R.id.button_dd);
-        button_week_number = (Button) findViewById(R.id.button_week_number);
-        button_week_word = (Button) findViewById(R.id.button_week_word);
+        button_start = (Button) findViewById(R.id.button_strat);
 
         //裝置管理員
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -115,40 +114,52 @@ public class MainActivity extends AppCompatActivity {
                         .setItems(ruleList.toArray(new String[ruleList.size()]), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String Mode = ruleList.get(which);
-                                Toast.makeText(getApplicationContext(), Mode, Toast.LENGTH_LONG).show();
+                                MODE = ruleList.get(which);
+                                Toast.makeText(getApplicationContext(), MODE, Toast.LENGTH_LONG).show();
                             }
                         });
                 rule.show();
             }
         });
+
+        button_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PassWord = editText_input.getText().toString();
+                /*
+                == handles null strings fine,
+                but calling .equals() from a null string will cause an exception.
+                */
+                if (PassWord==null || PassWord.equals("")) {
+                    AlertDialog.Builder passwordIsEmpty = new AlertDialog.Builder(MainActivity.this);
+                    passwordIsEmpty.setTitle("尚未輸入密碼");
+                    passwordIsEmpty.setMessage("請在密碼欄位裡輸入您的密碼！");
+                    passwordIsEmpty.setNegativeButton("了解", null);
+                    passwordIsEmpty.show();
+                }else if (MODE==null){
+                    AlertDialog.Builder modeIsEmpty = new AlertDialog.Builder(MainActivity.this);
+                    modeIsEmpty.setTitle("尚未選擇模式");
+                    modeIsEmpty.setMessage("請選擇您喜歡的密碼規則！");
+                    modeIsEmpty.setNegativeButton("了解", null);
+                    modeIsEmpty.show();
+                }else {
+                    getTimeStamp(MODE);
+                    textView_password.setText(PassWord+TimeStamp);
+                }
+            }
+        });
     }
 
-    public static String wordtonumber(String timestamp){
-        switch(timestamp){
-            case "Mon":
-                timestamp = "01";
-                break;
-            case "Tue":
-                timestamp = "02";
-                break;
-            case "Wed":
-                timestamp = "03";
-                break;
-            case "Thu":
-                timestamp = "04";
-                break;
-            case "Fri":
-                timestamp = "05";
-                break;
-            case "Sat":
-                timestamp = "06";
-                break;
-            case "Sun":
-                timestamp = "07";
-                break;
+    private void getTimeStamp(String mode){
+        if (mode.equals(getString(R.string.rule1))){
+            TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
         }
-        return timestamp;
+        else if (mode.equals(getString(R.string.rule2))){
+            TimeStamp = new SimpleDateFormat("MMdd").format(Calendar.getInstance().getTime());
+        }
+        else if (mode.equals(getString(R.string.rule3))){
+            TimeStamp = new SimpleDateFormat("dd").format(Calendar.getInstance().getTime());
+        }
     }
 
     private void update(){

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:hint="請在此輸入您的密碼"
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/editText_password"
+            android:id="@+id/editText_input"
             android:gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:layout_gravity="center"
@@ -31,7 +31,7 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="請選擇密碼規則"
+            android:text="[請選擇密碼規則]"
             android:textSize="@dimen/activity_horizontal_margin"
             android:id="@+id/button_rule"
             android:gravity="center_vertical|center_horizontal"
@@ -42,56 +42,51 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="您的密碼+日期(yyyyMMdd)"
+            android:text="[啟動新密碼規則]"
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/button_yyyyMMdd"
+            android:id="@+id/button_strat"
             android:clickable="true"
             android:layout_weight="1"
-            android:background="#ff7800"
             android:layout_margin="2dp" />
 
-        <Button
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="您的密碼+日期(MMdd)"
+            android:text=""
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/button_MMdd"
+            android:id="@+id/textView_password"
             android:clickable="true"
             android:layout_weight="1"
-            android:background="#ff8c00"
             android:layout_margin="2dp" />
 
-        <Button
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="您的密碼+日期(dd)"
+            android:text=""
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/button_dd"
+            android:id="@+id/textView2"
             android:clickable="true"
             android:layout_weight="1"
-            android:background="#ffa000"
             android:layout_margin="2dp" />
 
-        <Button
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="您的密碼+星期(數字)"
+            android:text=""
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/button_week_number"
+            android:id="@+id/textView3"
             android:clickable="true"
             android:layout_weight="1"
-            android:background="#ffb400"
             android:layout_margin="2dp" />
 
-        <Button
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="您的密碼+星期(英文單字)"
+            android:text=""
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/button_week_word"
+            android:id="@+id/textView4"
             android:clickable="true"
             android:layout_weight="1"
-            android:background="#ffc800"
             android:layout_margin="2dp" />
 
     </LinearLayout>

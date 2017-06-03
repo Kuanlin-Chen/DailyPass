@@ -17,7 +17,7 @@ import java.util.Calendar;
  */
 public class MyReceiver extends BroadcastReceiver {
 
-    String TimeStamp;
+    private static String TimeStamp;
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -40,24 +40,18 @@ public class MyReceiver extends BroadcastReceiver {
         }
     }
 
-    private void getTimeStamp(int mode){
-        switch (mode){
-            case 1:
-                TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-                break;
-            case 2:
-                TimeStamp = new SimpleDateFormat("MMdd").format(Calendar.getInstance().getTime());
-                break;
-            case 3:
-                TimeStamp = new SimpleDateFormat("dd").format(Calendar.getInstance().getTime());
-                break;
-            case 4:
-                TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
-                TimeStamp = MainActivity.wordtonumber(TimeStamp);
-                break;
-            case 5:
-                TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
-                break;
+    private void getTimeStamp(String mode){
+        if (mode.equals(R.string.rule1)){
+            TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        }
+        else if (mode.equals(R.string.rule2)){
+            TimeStamp = new SimpleDateFormat("MMdd").format(Calendar.getInstance().getTime());
+        }
+        else if (mode.equals(R.string.rule3)){
+            TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
+        }
+        else {
+            TimeStamp = "Error";
         }
     }
 }
