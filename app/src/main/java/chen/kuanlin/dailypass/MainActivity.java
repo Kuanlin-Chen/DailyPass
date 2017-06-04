@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editText_input;
     private TextView textView_password;
-    private Button button_rule, button_start;
+    private Button button_rule, button_start, button_check;
 
     public static DevicePolicyManager devicePolicyManager;
     private static ComponentName DAN;
@@ -37,15 +38,34 @@ public class MainActivity extends AppCompatActivity {
     public static String MODE = null;
     private static ArrayList<String> ruleList;
 
+    //Set up SharedPreference
+    private SharedPreferences settings;
+    private static final String DATA = "DATA";
+    private static final String WORD = "WORD";
+    private static final String RULE = "RULE";
+
+    private Openssl openssl = new Openssl();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initComponent();
+        initDevicePolicyManager();
+        initData();
+        eventListener();
+    }
+
+    private void initComponent(){
         editText_input = (EditText) findViewById(R.id.editText_input);
         textView_password = (TextView)findViewById(R.id.textView_password);
         button_rule = (Button) findViewById(R.id.button_rule);
         button_start = (Button) findViewById(R.id.button_strat);
+        button_check = (Button)findViewById(R.id.button_check);
+    }
 
+    private void initDevicePolicyManager(){
         //裝置管理員
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         //申請權限
@@ -57,46 +77,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "裝置政策管理員");
             startActivityForResult(intent, REQUEST_CODE);
         }
-
-        initData();
-        eventListener();
-
-        /*
-        button_yyyyMMdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MODE = 1;
-                PassWord = editText_password.getText().toString();
-                String TimeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-                devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                //textView_rule.setText("新密碼：" + PassWord + TimeStamp);
-                update();
-            }
-        });
-
-        button_MMdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MODE = 2;
-                PassWord = editText_password.getText().toString();
-                String TimeStamp = new SimpleDateFormat("MMdd").format(Calendar.getInstance().getTime());
-                devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                //textView_rule.setText("新密碼：" + PassWord + TimeStamp);
-                update();
-            }
-        });
-
-        button_week_word.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MODE = 5;
-                PassWord = editText_password.getText().toString();
-                String TimeStamp = new SimpleDateFormat("EEE").format(Calendar.getInstance().getTime());
-                devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                //textView_rule.setText("新密碼：" + PassWord + TimeStamp);
-                update();
-            }
-        });  */
     }
 
     private void initData(){
@@ -147,9 +127,18 @@ public class MainActivity extends AppCompatActivity {
                     textView_password.setText("新密碼："+PassWord+TimeStamp);
                     //SetupPassword
                     devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
-                    //register update broadcast
+                    //Save data into SharedPreference
+                    saveData(PassWord, MODE);
+                    //Register update broadcast
                     //update();
                 }
+            }
+        });
+
+        button_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readData();
             }
         });
     }
@@ -178,5 +167,18 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    private void saveData(String password, String rule){
+        settings = getSharedPreferences(DATA, 0);
+        settings.edit()
+                .putString(WORD, openssl.Encrypt(password))
+                .putString(RULE, openssl.Encrypt(rule))
+                .commit();
+    }
+
+    private void readData(){
+        settings = getSharedPreferences(DATA, 0);
+        textView_password.setText(openssl.Decrypt(settings.getString(RULE, "Rule")));
     }
 }

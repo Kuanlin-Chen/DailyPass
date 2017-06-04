@@ -59,12 +59,12 @@
             android:layout_weight="1"
             android:layout_margin="2dp" />
 
-        <TextView
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="[查看密碼規則]"
             android:textSize="@dimen/activity_horizontal_margin"
-            android:id="@+id/textView2"
+            android:id="@+id/button_check"
             android:clickable="true"
             android:layout_weight="1"
             android:layout_margin="2dp" />
