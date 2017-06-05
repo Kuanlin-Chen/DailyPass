@@ -5,10 +5,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.R.*;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,16 +17,25 @@ import java.util.Calendar;
  */
 public class MyReceiver extends BroadcastReceiver {
 
+    private static String PassWord;
     private static String TimeStamp;
+    private static String MODE;
+    private SharedPreferences settings;
+    private Openssl openssl = new Openssl();
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
         Bundle bundle = intent.getExtras();
         if(bundle.get("msg").equals("updatepassword")){
-            getTimeStamp(context, MainActivity.MODE);
-            MainActivity.devicePolicyManager.resetPassword((MainActivity.PassWord)+TimeStamp, 0);
+            settings = context.getSharedPreferences("DATA", 0);
+            PassWord = openssl.Decrypt(settings.getString("WORD", ""));
+            MODE = openssl.Decrypt(settings.getString("RULE", ""));
+            //get new TimeStamp
+            getTimeStamp(context, MODE);
+            MainActivity.devicePolicyManager.resetPassword(PassWord+TimeStamp, 0);
 
-            update(context, intent);
+            update(context);
         }
     }
 
@@ -44,10 +52,10 @@ public class MyReceiver extends BroadcastReceiver {
         }
     }
 
-    private void update(Context context, Intent intent){
+    private void update(Context context){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR_OF_DAY, 00);
-        Intent intent2 = new Intent(context, MyReceiver.class);
+        Intent intent = new Intent(context, MyReceiver.class);
         intent.putExtra("msg", "updatepassword");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_ONE_SHOT);

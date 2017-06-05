@@ -17,12 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
+/**
+ * Modified by kuanlin on 2017/06/03.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private EditText editText_input;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         button_rule = (Button) findViewById(R.id.button_rule);
         button_start = (Button) findViewById(R.id.button_strat);
         button_check = (Button)findViewById(R.id.button_check);
+
     }
 
     private void initDevicePolicyManager(){
@@ -84,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         ruleList.add(getString(R.string.rule1));
         ruleList.add(getString(R.string.rule2));
         ruleList.add(getString(R.string.rule3));
+        settings = getSharedPreferences(DATA, 0);
+        if((PassWord = openssl.Decrypt(settings.getString(WORD, "")))!="ERROR"){
+            editText_input.setText(PassWord);
+        }
     }
 
     private void eventListener(){
@@ -126,11 +132,11 @@ public class MainActivity extends AppCompatActivity {
                     getTimeStamp(MODE);
                     textView_password.setText("新密碼："+PassWord+TimeStamp);
                     //SetupPassword
-                    devicePolicyManager.resetPassword(PassWord + TimeStamp, 0);
+                    devicePolicyManager.resetPassword(PassWord+TimeStamp, 0);
                     //Save data into SharedPreference
                     saveData(PassWord, MODE);
                     //Register update broadcast
-                    //update();
+                    update();
                 }
             }
         });
@@ -170,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveData(String password, String rule){
-        settings = getSharedPreferences(DATA, 0);
+        //settings = getSharedPreferences(DATA, 0);
         settings.edit()
                 .putString(WORD, openssl.Encrypt(password))
                 .putString(RULE, openssl.Encrypt(rule))
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readData(){
-        settings = getSharedPreferences(DATA, 0);
+        //settings = getSharedPreferences(DATA, 0);
         textView_password.setText(openssl.Decrypt(settings.getString(RULE, "Rule")));
     }
 }
